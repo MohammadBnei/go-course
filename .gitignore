@@ -32,3 +32,5 @@
 
 # Dependency directories
 vendor/
+
+go-course
