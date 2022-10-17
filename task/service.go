@@ -2,6 +2,7 @@ package task
 
 type Service interface {
 	Store(input InputTask) (Task, error)
+	ListAll() ([]Task, error)
 }
 
 type service struct {
@@ -23,4 +24,13 @@ func (s *service) Store(input InputTask) (Task, error) {
 	}
 
 	return newTask, nil
+}
+
+func (s *service) ListAll() ([]Task, error) {
+	tasks, err := s.repository.ListAll()
+	if err != nil {
+		return tasks, err
+	}
+
+	return tasks, nil
 }

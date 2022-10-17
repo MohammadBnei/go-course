@@ -37,6 +37,7 @@ func main() {
 	})
 
 	api.POST("/task", taskHandler.Store)
+	api.GET("/task", taskHandler.List)
 
 	r.Run(":3000")
 }
