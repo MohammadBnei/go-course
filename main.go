@@ -37,7 +37,10 @@ func main() {
 	})
 
 	api.POST("/task", taskHandler.Store)
-	api.GET("/task", taskHandler.List)
+	api.GET("/task", taskHandler.FetchAll)
+	api.GET("/task/:id", taskHandler.FetchById)
+	api.PUT("/task/:id", taskHandler.Update)
+	api.DELETE("/task/:id", taskHandler.Delete)
 
 	r.Run(":3000")
 }
