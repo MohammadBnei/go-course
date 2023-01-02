@@ -1,0 +1,76 @@
+basePath: /api
+definitions:
+  handler.Response:
+    properties:
+      data: {}
+      message:
+        type: string
+      success:
+        type: boolean
+    type: object
+  task.InputTask:
+    properties:
+      description:
+        type: string
+      name:
+        type: string
+    required:
+    - description
+    - name
+    type: object
+  task.Task:
+    properties:
+      created_at:
+        type: string
+      description:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      updated_at:
+        type: string
+    type: object
+host: localhost:3000
+info:
+  contact:
+    email: support@swagger.io
+    name: API Support
+    url: http://www.swagger.io/support
+  description: This is a sample server celler server.
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  termsOfService: http://swagger.io/terms/
+  title: Go Course - 4IW
+  version: "1.0"
+paths:
+  /task:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: Message body
+        in: body
+        name: taskInput
+        required: true
+        schema:
+          $ref: '#/definitions/task.InputTask'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/task.Task'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.Response'
+      summary: Stores a task
+      tags:
+      - task
+securityDefinitions:
+  BasicAuth:
+    type: basic
+swagger: "2.0"

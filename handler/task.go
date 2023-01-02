@@ -28,6 +28,15 @@ func (ts *taskHandler) Hello(c *gin.Context) {
 	})
 }
 
+// Store godoc
+// @Summary      Stores a task
+// @Tags         task
+// @Accept       json
+// @Produce      json
+// @Param        taskInput   body      task.InputTask  true  "Message body"
+// @Success      201  {object}  task.Task
+// @Failure      400  {object}	Response
+// @Router       /task [post]
 func (th *taskHandler) Store(c *gin.Context) {
 	// Get json body
 	var input task.InputTask
@@ -53,12 +62,7 @@ func (th *taskHandler) Store(c *gin.Context) {
 		return
 	}
 
-	response := &Response{
-		Success: true,
-		Message: "New task created",
-		Data:    newTask,
-	}
-	c.JSON(http.StatusCreated, response)
+	c.JSON(http.StatusCreated, newTask)
 }
 
 func (th *taskHandler) FetchAll(c *gin.Context) {
@@ -73,8 +77,7 @@ func (th *taskHandler) FetchAll(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, &Response{
-		Success: true,
-		Data:    tasks,
+		Data: tasks,
 	})
 }
 
@@ -100,8 +103,7 @@ func (th *taskHandler) FetchById(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, &Response{
-		Success: true,
-		Data:    task,
+		Data: task,
 	})
 }
 
@@ -141,7 +143,6 @@ func (th *taskHandler) Update(c *gin.Context) {
 	}
 
 	response := &Response{
-		Success: true,
 		Message: "New task created",
 		Data:    uTask,
 	}
@@ -170,7 +171,6 @@ func (th *taskHandler) Delete(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, &Response{
-		Success: true,
 		Message: "Task successfully deleted",
 	})
 }
