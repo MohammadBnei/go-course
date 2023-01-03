@@ -4,13 +4,31 @@ import (
 	"go-course/handler"
 	"go-course/task"
 	"log"
+	"net"
 	"os"
 
-	"github.com/gin-gonic/gin"
+	"google.golang.org/grpc"
+	"google.golang.org/grpc/reflection"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
+
+	_ "go-course/docs"
+	"go-course/gen"
 )
 
+// @title           Todo Task API
+// @version         1.0
+// @termsOfService  http://swagger.io/terms/
+
+// @contact.name   API Support
+// @contact.url    http://www.swagger.io/support
+// @contact.email  support@swagger.io
+
+// @license.name  Apache 2.0
+// @license.url   http://www.apache.org/licenses/LICENSE-2.0.html
+
+// @host      localhost:3000
+// @BasePath  /api
 func main() {
 	dbURL := os.Getenv("DB_URL")
 	if dbURL == "" {
@@ -28,19 +46,15 @@ func main() {
 	taskService := task.NewService(taskRepository)
 	taskHandler := handler.NewTaskHandler(taskService)
 
-	r := gin.Default()
-	api := r.Group("/api")
-	api.GET("/ping", func(c *gin.Context) {
-		c.JSON(200, gin.H{
-			"message": "pong",
-		})
-	})
+	lis, err := net.Listen("tcp", "0.0.0.0:4000")
+	if err != nil {
+		log.Fatal(err)
+	}
 
-	api.POST("/task", taskHandler.Store)
-	api.GET("/task", taskHandler.FetchAll)
-	api.GET("/task/:id", taskHandler.FetchById)
-	api.PUT("/task/:id", taskHandler.Update)
-	api.DELETE("/task/:id", taskHandler.Delete)
+	grpcServer := grpc.NewServer()
 
-	r.Run(":3000")
+	gen.RegisterTaskServiceServer(grpcServer, taskHandler)
+	reflection.Register(grpcServer)
+
+	grpcServer.Serve(lis)
 }

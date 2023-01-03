@@ -1,0 +1,27 @@
+syntax = "proto3";
+
+package task;
+
+option go_package = "./gen";
+
+message Task {
+  int32 id = 1;
+  string name = 2;
+  string description = 3;
+}
+
+service TaskService {
+  rpc FetchAll (Request) returns (Response);
+  rpc Store (Request) returns (Response);
+}
+
+message Request {
+  int32 id = 1;
+  string name = 2;
+  string description = 3;
+}
+
+message Response {
+  Task task = 1;
+  repeated Task tasks = 2;
+}
